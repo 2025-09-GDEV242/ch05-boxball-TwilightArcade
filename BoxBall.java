@@ -52,8 +52,15 @@ public class BoxBall
         yPosition = yPos;
         color = ballColor;
         diameter = ballDiameter;
-
+        
+        myBox = box;
         canvas = drawingCanvas;
+        
+        java.util.Random rng = new java.util.Random();
+        do { xSpeed = rng.nextInt(15) - 7; } while (xSpeed == 0);
+        do { ySpeed = rng.nextInt(15) -7; } while (ySpeed == 0);
+
+        
     }
 
     /**
@@ -78,14 +85,48 @@ public class BoxBall
      **/
     public void move()
     {
-        // remove from canvas at the current position
-        erase();
-            
-        // compute new position
-  
-        // figure out if it has hit the left or right wall
+        int nextX = xPosition + xSpeed;
+        int nextY = yPosition + ySpeed;
+        int left = myBox.getLeftWall();
+        int right = myBox.getRightWall();
+        int top = myBox.getTopWall();
+        int bottom = myBox.getBottomWall();
+        int minX = left;
+        int maxX = right - diameter;
+        int minY = top;
+        int maxY = bottom - diameter;
         
-        // figure out if it has hit the top or bottom wall
+        // Horizontal bounce
+        if (nextX < minX) { 
+            nextX = minX + (minX - nextX);
+            xSpeed = -xSpeed;
+        } else if (nextX > maxX) {
+            nextX = maxX - (nextX - maxX);
+            xSpeed = -xSpeed;
+        }
+        
+        //Vertical bounce
+        if (nextY < minY) {
+            nextY = minY + (minY - nextY);
+            ySpeed = -ySpeed;
+        } else if (nextY > maxY) {
+            nextY = maxY - (nextY - maxY);
+            ySpeed = -ySpeed;
+        }
+        
+        
+    
+        
+    
+    
+        erase();
+        xPosition = nextX;
+        yPosition = nextY;
+        
+  
+        
+        
+        
         
         draw();
     }    

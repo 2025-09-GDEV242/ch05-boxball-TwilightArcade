@@ -30,10 +30,47 @@ public class BallDemo
      * 
      * @param numOfBalls number of balls to simulate bouncing, clamped between 5-50. 
      */
-    public void boxBounce()
+    public void boxBounce(int n )
     {
-        // you must implement this
-    }
+        if (n < 5) n = 5;
+        
+        myCanvas.setVisible(true);
+        myCanvas.erase();
+        
+        int boxLeft = 80;
+        int boxTop = 60;
+        int boxWidth = 420;
+        int boxHeight = 300;
+        int borderThickness = 4;
+        
+        Box theBox = new Box(boxLeft, boxTop, boxWidth, boxHeight, myCanvas );
+        theBox.draw();
+        
+        int left = theBox.getLeftWall();
+        int right = theBox.getRightWall();
+        int top = theBox.getTopWall();
+        int bottom = theBox.getBottomWall();
+        
+        java.util.Random rng = new java.util.Random();
+        java.util.ArrayList<BoxBall> balls = new java.util.ArrayList<>();
+        
+        for (int i = 0; i<n; i = i + 1) {
+            int diameter = 15 + rng.nextInt(16);
+            
+            int startX= left + rng.nextInt(Math.max(1, (right - left) - diameter));
+            int startY= top + rng.nextInt(Math.max(1, ( bottom - top) - diameter));
+            java.awt.Color c = new java.awt.Color(rng.nextInt(201), rng.nextInt(201), rng.nextInt(201));
+            BoxBall bb = new BoxBall(startX, startY, diameter,c,theBox, myCanvas); 
+            balls.add(bb); 
+        }
+        for (int frame = 0; frame < 5000; frame++) {
+            myCanvas.wait(50);
+            for ( BoxBall b : balls) { 
+                b.move();
+            }
+        }
+        myCanvas.wait(10);
+     }
     
     /**
      * Simulate two bouncing balls
